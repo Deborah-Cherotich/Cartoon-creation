@@ -1,0 +1,13 @@
+﻿TITLE: Mum said there is food
+STYLE: 2D cartoon, Tom and Jerry style simple, bold outlines, big eyes, exaggerated faces, African, bright, 9:16 vertical. 
+
+1) IMAGE PROMPT (Bing/Leonardo):
+2D cartoon, Tom and Jerry style simple, bold outlines, big eyes, exaggerated faces, African, bright, 9:16 vertical. Mum in kitenge headwrap walks into Kenyan kitchen at night + Shiro girl with puffs holding chicken frozen scared
+
+2) VIDEO PROMPT (Pika/Runway/Hailuo Image-to-Video, 9:16, 5s):
+Mum walks in from left with bounce walk cycle, light flicks on, Shiro freezes holding chicken leg, camera fast zoom to shocked eyes, squash and stretch, smooth walk cycle, talking mouth, squash and stretch, Tom and Jerry timing
+
+3) DIALOGUE for CapCut TTS:
+Mum (strict-funny): Come eat! [0-2s] | Shiro (excited running): What did you cook?! [2-5s] | Mum (deadpan): Nothing. I was just calling you. [5-8s] | Shiro (crying comedy): Aki mum!! [8-10s] + laugh SFX
+
+SFX: pop, boing, sting. Captions Bold ON.

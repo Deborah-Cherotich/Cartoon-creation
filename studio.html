@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Small Small Problems — Comedy Cartoon Studio 🇰🇪</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#0f0f14;--card:#1c1c26;--card2:#252536;--yellow:#FFD93D;--pink:#FF6B9D;--green:#6BCB77;--blue:#4D96FF;--purple:#9D65C9;--white:#fff;--muted:#aaa}
+body{font-family:'Segoe UI',system-ui,-apple-system,Roboto,Arial,sans-serif;background:var(--bg);color:var(--white);min-height:100vh}
+header{position:sticky;top:0;z-index:20;background:rgba(15,15,20,.95);backdrop-filter:blur(10px);border-bottom:2px solid #222;padding:12px 16px;display:flex;align-items:center;gap:12px}
+.logo{font-size:32px}
+h1{font-size:20px;line-height:1.1}h1 span{color:var(--yellow)}
+.tag{font-size:12px;color:var(--muted)}
+nav{display:flex;gap:8px;padding:12px 16px;overflow-x:auto;position:sticky;top:64px;background:var(--bg);z-index:15}
+nav button{white-space:nowrap;border:0;padding:10px 18px;border-radius:999px;font-weight:700;cursor:pointer;background:#222;color:#fff;font-size:14px}
+nav button.active{background:var(--yellow);color:#000}
+.wrap{max-width:1100px;margin:0 auto;padding:16px;padding-bottom:80px}
+.grid{display:grid;grid-template-columns:1fr;gap:16px}
+@media(min-width:900px){.grid{grid-template-columns:380px 1fr}.grid-2{grid-template-columns:1fr 1fr;display:grid;gap:16px}.grid-3{grid-template-columns:1fr 1fr 1fr;display:grid;gap:12px}}
+.card{background:var(--card);border-radius:18px;padding:18px;border:1px solid #2e2e42}
+.card h2{font-size:18px;margin-bottom:8px}.card p.sub{color:var(--muted);font-size:13px;margin-bottom:12px}
+label{font-size:13px;font-weight:700;display:block;margin:12px 0 6px;color:var(--yellow)}
+input[type=text],select,textarea{width:100%;padding:12px;border-radius:12px;border:1px solid #333;background:#111;color:#fff;font-size:15px}
+textarea{min-height:70px;resize:vertical}
+.chars{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.char-pick{display:flex;align-items:center;gap:8px;background:#111;border:2px solid #333;border-radius:12px;padding:8px 10px;cursor:pointer;font-size:13px}
+.char-pick.on{border-color:var(--yellow);background:#23230f}
+.char-pick .e{font-size:26px}
+.moods{display:flex;gap:8px}.moods button,.lens button{flex:1;padding:10px;border-radius:12px;border:2px solid #333;background:#111;color:#fff;font-weight:700;cursor:pointer}
+.moods button.on,.lens button.on{border-color:var(--pink);background:#2a1420}
+.btn{width:100%;padding:15px;border:0;border-radius:14px;font-size:16px;font-weight:900;cursor:pointer;margin-top:14px;background:var(--yellow);color:#000}
+.btn.ghost{background:#222;color:#fff}.btn.pink{background:var(--pink);color:#fff}.btn.green{background:var(--green);color:#000}
+.row{display:flex;gap:8px}.row>*{flex:1}
+/* PLAYER 9:16 */
+.stage-wrap{display:flex;gap:16px;flex-wrap:wrap;justify-content:center}
+.stage{width:300px;height:533px;background:linear-gradient(180deg,#2b2b5c,#1a1a33 60%,#0f0f14);border-radius:22px;border:4px solid #333;position:relative;overflow:hidden;flex-shrink:0;box-shadow:0 20px 60px rgba(0,0,0,.5)}
+.stage.tiktok{border-color:var(--yellow)}
+.stage-top{position:absolute;top:0;left:0;right:0;padding:10px;display:flex;justify-content:space-between;align-items:center;z-index:5;font-size:12px;font-weight:800}
+.badge{background:rgba(0,0,0,.6);padding:4px 10px;border-radius:999px}
+.stage-bg{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:120px;opacity:.18}
+.actors{position:absolute;bottom:110px;left:0;right:0;display:flex;justify-content:center;gap:6px;align-items:flex-end;z-index:2}
+.actor{text-align:center;transition:all .4s;animation:pop .4s}
+.actor .face{font-size:56px;line-height:1;filter:drop-shadow(0 4px 8px rgba(0,0,0,.5))}
+.actor.small .face{font-size:42px}.actor.big .face{font-size:72px}
+.actor .nm{font-size:11px;font-weight:800;background:#000;padding:2px 8px;border-radius:999px;margin-top:4px;display:inline-block}
+.actor.talking .face{animation:talk .4s infinite alternate}
+@keyframes talk{from{transform:scale(1) rotate(-3deg)}to{transform:scale(1.12) rotate(3deg)}}
+@keyframes pop{from{transform:scale(0)}to{transform:scale(1)}}
+.actor.shake{animation:shake .4s}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px) rotate(-5deg)}75%{transform:translateX(8px) rotate(5deg)}}
+.bubble{position:absolute;top:46px;left:12px;right:12px;background:#fff;color:#111;border-radius:16px;padding:12px 14px;z-index:4;min-height:70px;box-shadow:0 6px 20px rgba(0,0,0,.4)}
+.bubble:after{content:'';position:absolute;bottom:-10px;left:50%;margin-left:-10px;border:10px solid transparent;border-top-color:#fff;border-bottom:0}
+.bubble .spk{font-size:11px;font-weight:900;color:var(--pink);letter-spacing:.5px}
+.bubble .txt{font-size:16px;font-weight:700;line-height:1.3}
+.scene-desc{position:absolute;top:8px;left:0;right:0;text-align:center;font-size:11px;color:#fff;opacity:.8}
+.subtitle{position:absolute;bottom:56px;left:12px;right:12px;text-align:center;z-index:4}
+.subtitle span{background:#000;color:var(--yellow);font-weight:800;font-size:13px;padding:6px 12px;border-radius:8px;display:inline-block}
+.controls{display:flex;gap:8px;padding:10px;position:absolute;bottom:0;left:0;right:0;z-index:5}
+.controls button{flex:1;padding:10px;border-radius:10px;border:0;font-weight:800;cursor:pointer;background:#fff;color:#000;font-size:13px}
+.progress{position:absolute;top:0;left:0;height:4px;background:var(--yellow);z-index:6;transition:width .3s}
+.ep-list{display:grid;gap:10px;max-height:560px;overflow:auto}
+.ep{background:#111;border:1px solid #333;border-radius:14px;padding:12px;cursor:pointer}
+.ep:hover{border-color:var(--yellow)}.ep.on{border-color:var(--yellow);background:#22220f}
+.ep b{font-size:14px}.ep small{color:var(--muted);display:block;font-size:12px;margin-top:4px}
+.script{background:#111;border-radius:12px;padding:12px;font-size:14px;line-height:1.6;white-space:pre-wrap;max-height:360px;overflow:auto;border:1px solid #333}
+.kv{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+.pill{background:#111;border:1px solid #333;padding:6px 12px;border-radius:999px;font-size:12px}
+.cast-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(min-width:700px){.cast-grid{grid-template-columns:1fr 1fr 1fr 1fr}}
+.cast{background:#111;border-radius:14px;padding:12px;text-align:center;border:1px solid #333}
+.cast .fe{font-size:44px}.cast b{font-size:13px;display:block;margin:6px 0 2px}.cast small{font-size:11px;color:var(--muted)}
+footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
+.capbox{background:#0d3b2e;border:1px dashed var(--green);border-radius:12px;padding:12px;font-size:13px;margin-top:10px;white-space:pre-wrap}
+.hint{background:#2a2000;border:1px solid var(--yellow);border-radius:12px;padding:10px;font-size:13px;margin-top:10px}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">😂</div>
+<div><h1>Small Small <span>Problems</span> 🇰🇪</h1><div class="tag">Everyday Kenyan / African life • comedy cartoon studio • 9:16 TikTok ready</div></div>
+</header>
+<nav>
+<button class="active" data-tab="studio">🎬 Studio</button>
+<button data-tab="watch">📺 Watch Episodes</button>
+<button data-tab="cast">🌟 Characters</button>
+<button data-tab="ideas">💡 20 Episode Ideas</button>
+<button data-tab="grow">🚀 Grow + Part 1/2 Trick</button>
+</nav>
+<div class="wrap">
+
+<!-- STUDIO -->
+<div id="tab-studio" class="grid">
+<div class="card">
+<h2>🎬 Create Episode</h2>
+<p class="sub">Type a topic, pick characters, choose mood. We generate a full cartoon script + play it in TikTok format.</p>
+<label>Topic (e.g. Mum catches me eating at midnight)</label>
+<input type="text" id="topic" value="Mum catches me eating chicken at midnight" placeholder="e.g. Neighbour steals my WiFi...">
+<label>Characters (pick 1-4)</label>
+<div class="chars" id="charPick"></div>
+<label>Mood</label>
+<div class="moods" id="moodPick">
+<button data-m="funny" class="on">😂 Funny</button>
+<button data-m="dramatic">😱 Dramatic</button>
+<button data-m="crazy">🤪 Crazy</button>
+</div>
+<label>Length</label>
+<div class="lens" id="lenPick">
+<button data-l="15" class="on">15 sec</button>
+<button data-l="30">30 sec</button>
+<button data-l="60">60 sec</button>
+</div>
+<label><input type="checkbox" id="cliff" checked> End with Part 1 cliffhanger? 👀 (more comments!)</label>
+<button class="btn" onclick="generate()">✨ GENERATE CARTOON ✨</button>
+<div class="row"><button class="btn ghost" onclick="surprise()">🎲 Surprise me</button><button class="btn ghost" onclick="fillExample()">🇰🇪 Kenyan random</button></div>
+<div class="hint">💡 Tip: keep it simple! HTML+CSS+JS cartoons work best with 4–6 scenes, big faces, speech bubbles + subtitles. Export to CapCut after.</div>
+</div>
+
+<div>
+<div class="stage-wrap">
+<div class="stage tiktok" id="stage">
+<div class="progress" id="prog" style="width:0%"></div>
+<div class="stage-top"><span class="badge" id="epBadge">EP 00 • 15s</span><span class="badge">📱 9:16 TikTok</span></div>
+<div class="stage-bg" id="stageBg">🍗</div>
+<div class="scene-desc" id="sceneDesc">Press GENERATE to start 😂</div>
+<div class="bubble" id="bubble" style="display:none"><div class="spk" id="spk">MUM</div><div class="txt" id="btxt">...</div></div>
+<div class="actors" id="actors"></div>
+<div class="subtitle"><span id="sub">Small Small Problems 🇰🇪</span></div>
+<div class="controls"><button onclick="playCurrent()">▶ Play</button><button onclick="nextScene()">Next ⏭</button><button onclick="toggleSound()">🔊 <span id="sndLbl">On</span></button></div>
+</div>
+<div class="card" style="flex:1;min-width:280px">
+<h2>📜 Script</h2><p class="sub">Auto-generated scenes • edit then play or export to CapCut</p>
+<div class="kv" id="metaPills"></div>
+<textarea id="scriptEdit" style="min-height:140px"></textarea>
+<div class="row"><button class="btn pink" onclick="playFromText()">▶ Play my edit</button><button class="btn green" onclick="exportCapCut()">📋 Copy CapCut script</button></div>
+<button class="btn ghost" onclick="copyCaption()">📲 Copy TikTok caption + hashtags</button>
+<div class="capbox" id="captionBox">Caption will appear here after Generate...</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- WATCH -->
+<div id="tab-watch" style="display:none">
+<div class="grid-2">
+<div class="card"><h2>📺 Ready Episodes (tap to play)</h2><p class="sub">10 classics + 10 brand-new ideas. All universal + Kenyan flavour.</p><div class="ep-list" id="epList"></div></div>
+<div class="card" style="text-align:center"><h2 id="watchTitle">Select an episode 👆</h2><p class="sub" id="watchDesc"></p>
+<div style="display:flex;justify-content:center"><div class="stage" id="stage2">
+<div class="progress" id="prog2" style="width:0%"></div>
+<div class="stage-top"><span class="badge" id="epBadge2">EP</span><span class="badge">9:16</span></div>
+<div class="stage-bg" id="stageBg2">😂</div>
+<div class="bubble" id="bubble2" style="display:none"><div class="spk" id="spk2"></div><div class="txt" id="btxt2"></div></div>
+<div class="actors" id="actors2"></div>
+<div class="subtitle"><span id="sub2">...</span></div>
+<div class="controls"><button onclick="playWatch()">▶ Play</button><button onclick="nextWatch()">Next ⏭</button></div>
+</div></div></div>
+</div>
+</div>
+
+<!-- CAST -->
+<div id="tab-cast" style="display:none">
+<div class="card"><h2>🌟 Re-usable Cast — use them endlessly!</h2><p class="sub">Simple 2D style: big emoji face + name tag + exaggerated expression. Perfect for fast production.</p><div class="cast-grid" id="castGrid"></div></div>
+</div>
+
+<!-- IDEAS -->
+<div id="tab-ideas" style="display:none">
+<div class="card"><h2>💡 20 Episode Ideas (10 yours + 10 new 🔥)</h2><p class="sub">Tap any card to load it into the Studio generator.</p><div class="grid-3" id="ideaGrid"></div></div>
+</div>
+
+<!-- GROW -->
+<div id="tab-grow" style="display:none">
+<div class="grid-2">
+<div class="card"><h2>🚀 How to grow (no begging for follows)</h2><p class="sub">Make the story itself continue.</p><div class="script">PART 1 HOOK FORMULA:
+1. Start in the middle of drama: "I know what you did."
+2. Panic face 😱 + freeze
+3. END suddenly: "What do you think she did? 👀 Part 2?"
+→ People comment theories = algorithm pushes you.
+
+POSTING:
+• Post 1/day 7pm EAT (Kenya peak)
+• Always 9:16, subtitles ON, first 1 sec = shocked face
+• Caption: question, not statement. "Is this your mum too? 😭"
+• Reply to EVERY comment with a cartoon line
+• Series playlist: "Mum Chronicles Ep1-10", "M-Pesa Pain", "Crush Delays"
+</div>
+<button class="btn" onclick="makeCliffhanger()">✨ Generate Part 1 / Part 2 hook for my topic</button>
+<div class="capbox" id="hookBox">Hook will appear here...</div>
+</div>
+<div class="card"><h2>🎨 Keep style VERY simple (important!)</h2><p class="sub">Don't build a Pixar engine. Do this:</p><div class="script">✅ HTML+CSS+JS only
+✅ Characters = emoji SVG + color shirt
+✅ Speech bubbles + big subtitles
+✅ Slide / bounce / shake animations
+✅ Sound = pop + laugh via WebAudio
+✅ Background = 1 emoji (🍗 🛋️ ⛪ 📶)
+✅ Scene transitions = fade/slide 0.3s
+✅ Edit in CapCut: add Luo/Benga beat, whoosh SFX
+
+WORKFLOW: Generate here → Play → Screen-record → CapCut → TikTok/Reels/Shorts
+UNIVERSAL + KENYAN = dating, parents, money, food, church, neighbours, chama, matatu, KPLC, chamaa, weddings 💒</div></div>
+</div>
+</div>
+
+<footer>Made with 😂 in Nairobi • Small Small Problems • HTML+CSS+JS • Export to CapCut → TikTok / Reels / Shorts</footer>
+</div>
+<script>
+// ===== DATA =====
+const CHARS={
+mum:{e:'👩🏾',name:'Mum',color:'#FF6B9D',trait:'Calm until you touch her food.',line:'NILIKUAMBIAJE?!'},
+dad:{e:'👨🏾',name:'Dad',color:'#4D96FF',trait:'Has an opinion about EVERYTHING.',line:'In our time...'},
+shiro:{e:'👧🏾',name:'Shiro',color:'#FFD93D',trait:'Dramatic main character.',line:'Woi, I\'m finished!'},
+kevin:{e:'👦🏾',name:'Kevin',color:'#6BCB77',trait:'Always broke but buys nonsense.',line:'Bro, hold 500...'},
+auntie:{e:'👵🏾',name:'Auntie',color:'#9D65C9',trait:'Professional investigator 😂',line:'Nani alikuambia?'},
+neighbour:{e:'🧔🏾‍♂️',name:'Neighbour',color:'#FF9F45',trait:'Knows everyone\'s business.',line:'Nimeona kila kitu!'},
+crush:{e:'😍',name:'Crush',color:'#FF6B9D',trait:'Replies after 9 business days.',line:'We need to talk.'},
+mpesa:{e:'💸',name:'M-Pesa',color:'#00C853',trait:'Appears when money disappears.',line:'Transaction failed!'}
+};
+let selChars=['mum','shiro'], mood='funny', len='15';
+let currentScenes=[], curIdx=0, timer=null, soundOn=true, watchScenes=[], watchIdx=0;
+
+const EPISODES=[
+{t:'1. "Mum said there is food"',chars:['mum','shiro'],bg:'🍲',desc:'You run to kitchen excited...',script:[['Mum','Come eat!'],['Shiro','*runs* What did you cook?!'],['Mum','Nothing. I was just calling you.'],['Shiro','😭😭😭 Aki mum!!']]},
+{t:'2. "When your crush says we need to talk"',chars:['crush','shiro'],bg:'💬',desc:'5 seconds of overthinking...',script:[['Crush','We need to talk.'],['Shiro','😐 ...okay.'],['Shiro','What did I do? Was my emoji wrong? Did I breathe incorrectly??'],['Crush','...seen 9 days later 💀']]},
+{t:'3. "Borrowing 500 from your friend"',chars:['kevin','shiro'],bg:'💵',desc:'Beautiful friendship at risk...',script:[['Shiro','Bro, lend me 500?'],['Kevin','Sure! 🥹❤️'],['Kevin','When are you paying?'],['Shiro','Let\'s not ruin this beautiful friendship. 😶']]},
+{t:'4. "Neighbour\'s Wi-Fi"',chars:['neighbour','kevin'],bg:'📶',desc:'Your WiFi: NO INTERNET',script:[['Kevin','My WiFi: NO INTERNET ❌'],['Neighbour','Mine: FULL BARS 😎'],['Kevin','👁️👄👁️ ...password ni gani?'],['Neighbour','Nili-change. Ni "siwapiwi" 😂']]},
+{t:'5. "African parent mathematics"',chars:['mum','shiro'],bg:'🌾',desc:'There is food in the house...',script:[['Shiro','Mum, give me 100 for food.'],['Mum','100 for what? There is food in the house!'],['Shiro','What food?'],['Mum','There\'s flour.'],['Shiro','Am I supposed to eat flour raw?! 😭']]},
+{t:'6. "When you clean the house"',chars:['mum','shiro'],bg:'🧹',desc:'Camera zooms into ONE dust...',script:[['Shiro','*cleans everything* Done! 😌'],['Mum','*enters* You haven\'t cleaned.'],['Shiro','WHAT DO YOU MEAN??'],['Mum','Look at that corner. *zooms to 1 dust* 💀']]},
+{t:'7. "Going to church late"',chars:['shiro','auntie'],bg:'⛪',desc:'God understands...',script:[['Shiro','Today I\'m going early! 🙏'],['Narrator','9:00 AM: still sleeping 😴'],['Narrator','9:45 AM: still sleeping 😴'],['Shiro','10:00 AM: God understands. 😭😂']]},
+{t:'8. "Friend who says I\'m outside"',chars:['kevin','shiro'],bg:'🚪',desc:'Nobody at the door...',script:[['Kevin','I\'m outside!'],['Shiro','*opens door* Nobody. 👁️'],['Kevin','I\'m coming...'],['Kevin','30 mins later: I\'m almost there 💀']]},
+{t:'9. "Salary day"',chars:['mpesa','kevin'],bg:'💰',desc:'KSh 25,000 → KSh 147.50',script:[['M-Pesa','+KSh 25,000 received 😎💅🏾'],['Kevin','*orders food, clothes, sends money*'],['M-Pesa','Balance: KSh 147.50'],['Kevin','Where did everybody go?! 😭']]},
+{t:'10. "Don\'t tell anyone"',chars:['shiro','auntie'],bg:'👀',desc:'5 minutes later...',script:[['Auntie','Please don\'t tell anyone.'],['Shiro','I won\'t. 🤞'],['Shiro','*5 mins later* You won\'t believe...'],['Shiro','I wasn\'t going to tell you but... 👀😂']]},
+// NEW 10
+{t:'11. "M-Pesa balance check"',chars:['mpesa','shiro'],bg:'📱',desc:'You said you are broke...',script:[['Shiro','Guys I\'m broke, COMPLETELY broke.'],['M-Pesa','Dial *334# to check balance?'],['Shiro','Balance: KSh 12,480'],['Shiro','...I meant emotionally broke. 😭']]},
+{t:'12. "Auntie at wedding"',chars:['auntie','shiro'],bg:'💒',desc:'Every wedding same question...',script:[['Auntie','Shiro! Uko na miaka ngapi sasa?'],['Shiro','Auntie, leo ni harusi ya Carol...'],['Auntie','Na yako itakuwa lini? *takes pilau*'],['Shiro','Aki investigation unit! 💀']]},
+{t:'13. "KPLC tokens finish"',chars:['kevin','neighbour'],bg:'💡',desc:'Tokens die at 90th minute...',script:[['Kevin','Man U vs Arsenal, 89th min! ⚽'],['Narrator','*POWER OFF* Tokens finished!'],['Kevin','NOOOO! Nani ana tokens?!'],['Neighbour','Lipa na M-Pesa... oh, network down 😂']]},
+{t:'14. "Chapati mathematics"',chars:['mum','dad'],bg:'🫓',desc:'1 chapati, 5 people...',script:[['Mum','Leo kuna chapati moja.'],['Dad','Moja?! For the whole family?'],['Mum','Share with love ❤️'],['Shiro','*tears pencil-size piece* Asante 😭']]},
+{t:'15. "Matatu seat war"',chars:['kevin','neighbour'],bg:'🚌',desc:'That one window seat...',script:[['Kevin','*runs* Hiyo kiti ni yangu!'],['Neighbour','Mimi niliona kwanza!'],['Conductor','Wawili hamjui? Fare imepanda!'],['Both','Haya, tutasimama 😭']]},
+{t:'16. "Rain vs laundry"',chars:['mum','shiro'],bg:'🌧️',desc:'You just washed...',script:[['Shiro','*washes all clothes* Finally done!'],['Narrator','*5 mins later: MVUA!* 🌧️'],['Mum','SHIROOO! NGUO!!'],['Shiro','*running in rain with basin* WHY ME?! 😭']]},
+{t:'17. "Charging at neighbour"',chars:['neighbour','shiro'],bg:'🔌',desc:'Phone 1%...',script:[['Shiro','Auntie, tafadhali na-charge phone? 1%'],['Neighbour','Sawa, lakini usiguze remote.'],['Shiro','*30 mins later, 2%* Kwani hii ni solar?'],['Neighbour','Token zangu, sheria zangu 😂']]},
+{t:'18. "Chama contribution"',chars:['auntie','kevin'],bg:'🤝',desc:'WhatsApp group pressure...',script:[['Auntie','Chama: everyone send 1000 by Friday!'],['Kevin','Sawa... *Friday comes*'],['Auntie','@Kevin tumekuona online 👀'],['Kevin','Niko kwa tunnel, network mbaya 💀']]},
+{t:'19. "Sunday rice"',chars:['mum','dad'],bg:'🍚',desc:'Smell from kitchen...',script:[['Dad','Hmm, inanukia pilau!'],['Mum','Leo ni wali wa kawaida.'],['Dad','Na nyama?'],['Mum','Nyama ni ya wageni. Wewe ni mwenyeji 😂']]},
+{t:'20. "Exam leak"',chars:['shiro','crush'],bg:'📚',desc:' leakage...',script:[['Shiro','Exam imel leak! Nimesoma yote!'],['Teacher','*brings different paper*'],['Shiro','Hii ni gani?! 😱'],['Crush','Pole, ulisoma leak ya Uganda 😂💀']]}
+];
+
+// ===== UI BUILD =====
+const cp=document.getElementById('charPick');
+Object.entries(CHARS).forEach(([k,v])=>{
+let d=document.createElement('div');d.className='char-pick'+(selChars.includes(k)?' on':'');d.innerHTML=`<span class="e">${v.e}</span><span><b>${v.name}</b><br><small style="color:#888">${v.trait}</small></span>`;
+d.onclick=()=>{if(selChars.includes(k)){if(selChars.length>1)selChars=selChars.filter(x=>x!==k)}else{if(selChars.length>=4)selChars.shift();selChars.push(k)}[...cp.children].forEach((c,i)=>c.classList.toggle('on',selChars.includes(Object.keys(CHARS)[i])))};cp.appendChild(d);
+});
+document.querySelectorAll('#moodPick button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#moodPick button').forEach(x=>x.classList.remove('on'));b.classList.add('on');mood=b.dataset.m});
+document.querySelectorAll('#lenPick button').forEach(b=>b.onclick=()=>{document.querySelectorAll('#lenPick button').forEach(x=>x.classList.remove('on'));b.classList.add('on');len=b.dataset.l});
+
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{
+document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');
+['studio','watch','cast','ideas','grow'].forEach(t=>document.getElementById('tab-'+t).style.display=t===b.dataset.tab?'':'none');
+});
+
+const cg=document.getElementById('castGrid');
+Object.values(CHARS).forEach(c=>{let d=document.createElement('div');d.className='cast';d.innerHTML=`<div class="fe">${c.e}</div><b>${c.name}</b><small>${c.trait}</small><div style="margin-top:6px;font-size:11px;background:#222;border-radius:8px;padding:4px">“${c.line}”</div>`;cg.appendChild(d)});
+
+const ig=document.getElementById('ideaGrid');
+EPISODES.forEach((e,i)=>{let d=document.createElement('div');d.className='ep';d.innerHTML=`<b>${e.t}</b><small>${e.chars.map(k=>CHARS[k]?CHARS[k].e:'').join(' ')} • ${e.desc}</small>`;d.onclick=()=>{document.getElementById('topic').value=e.t.replace(/^\d+\.\s*"/,'').replace(/"$/,'');selChars=[...e.chars];[...cp.children].forEach((c,ii)=>c.classList.toggle('on',selChars.includes(Object.keys(CHARS)[ii])));document.querySelectorAll('nav button')[0].click();window.scrollTo({top:0,behavior:'smooth'});generate()};ig.appendChild(d)});
+
+const el=document.getElementById('epList');
+EPISODES.forEach((e,i)=>{let d=document.createElement('div');d.className='ep';d.innerHTML=`<b>${e.t}</b><small>${e.desc}</small>`;d.onclick=()=>{[...el.children].forEach(x=>x.classList.remove('on'));d.classList.add('on');loadWatch(i)};el.appendChild(d)});
+
+// ===== GENERATOR BRAIN =====
+function kenyanize(text,m){
+const pre={funny:['Aki 😂 ','Eh! ','Woi! ',''],dramatic:['😱 ','*dramatic music* ','Kimya... ',''],crazy:['🤪 ','Eeh buana! ','Wueh! ','']}[m]||[''];
+return pre[Math.floor(Math.random()*pre.length)]+text;
+}
+function topicToScenes(topic,chars,md,ln){
+topic=(topic||'funny story').trim();
+const low=topic.toLowerCase();
+let bg='😂', scenes=[];
+const pick=(a)=>chars.includes(a)?a:chars[Math.floor(Math.random()*chars.length)];
+const C1=chars[0]||'shiro', C2=chars[1]||chars[0]||'mum';
+const N1=CHARS[C1]?CHARS[C1].name:C1, N2=CHARS[C2]?CHARS[C2].name:C2;
+const count=ln==='15'?4:ln==='30'?5:6;
+function S(bg,who,text,sub,act){return{bg,who,text,sub:sub||text,act:act||''}}
+if(low.includes('midnight')||low.includes('chicken')||low.includes('eating')||low.includes('kitchen')){
+bg='🍗';scenes=[S('🌙',C1,'*tiptoeing to kitchen at 12:03 AM*','*midnight mission*'),S('🍗',C1,'*holding chicken* Just one piece...','Just one piece...'),S('💡',C2,'*LIGHTS ON* WHAT ARE YOU DOING?!','WHAT ARE YOU DOING?!','shake'),S('🍗',C1,'Checking if the chicken is still alive! 💀','Checking if chicken is alive 💀'),S('👩🏾',C2,'YOU WILL SEE! Come here!','YOU WILL SEE!','shake')];
+}else if(low.includes('wifi')||low.includes('internet')||low.includes('neighbour')||low.includes('neighbor')){
+bg='📶';scenes=[S('📶',C1,'My WiFi: NO INTERNET ❌','NO INTERNET','shake'),S('👀',C1,'*looks outside* Neighbour WiFi: FULL BARS!','FULL BARS?!'),S('🧔🏾‍♂️',C2,'Password? Hehe... ni "siwapiwi" 😂','siwapiwi 😂'),S('📱',C1,'Aki, even to send "hi" I must stand by the window?! 👁️👄👁️','by the window?!')];
+}else if(low.includes('crush')||low.includes('talk')||low.includes('dating')||low.includes('reply')){
+bg='💬';scenes=[S('💬',C2,'We need to talk.','We need to talk.','shake'),S('😐',C1,'...okay. *calm*','...okay.'),S('🤯',C1,'What did I do? Emoji wrong? Breathe wrong??','overthinking x100','shake'),S('💀',C2,'...seen. Replies after 9 business days.','9 business days later 💀')];
+}else if(low.includes('500')||low.includes('borrow')||low.includes('lend')||low.includes('money')||low.includes('salary')||low.includes('mpesa')||low.includes('broke')){
+bg='💸';scenes=[S('💵',C1,'Bro, can you lend me 500?','lend me 500?'),S('❤️',C2,'Sure! 🥹❤️','Sure!'),S('😐',C2,'When are you paying?','When paying?','shake'),S('💀',C1,"Let's not ruin this beautiful friendship. 😶",'beautiful friendship 😶'),S('💸',C2,'M-Pesa balance: KSh 147.50 😭','KSh 147.50 😭')];
+}else if(low.includes('church')||low.includes('late')||low.includes('sunday')||low.includes('god')){
+bg='⛪';scenes=[S('🙏',C1,"Today I'm going early!",'going early!'),S('😴',C1,'9:00 AM: still sleeping...','9AM sleeping'),S('😴',C1,'9:45 AM: STILL sleeping...','9:45 sleeping'),S('😭',C1,'10:00 AM: God understands. 😭😂','God understands 😂')];
+}else if(low.includes('clean')||low.includes('house')||low.includes('dust')||low.includes('mum')){
+bg='🧹';scenes=[S('🧹',C1,'*cleans everything* Sparkling! ✨','sparkling!'),S('🚶🏾',C2,'*mum enters, looks around*','*mum enters*'),S('😠',C2,"You haven't cleaned.",'haven\'t cleaned?!','shake'),S('🔍',C2,'Look at that corner. *zooms to 1 dust* 💀','ONE dust 💀'),S('😭',C1,'WHAT DO YOU MEAN?! 😭','WHAT?!','shake')];
+}else if(low.includes('food')||low.includes('cook')||low.includes('chapati')||low.includes('flour')||low.includes('rice')){
+bg='🍲';scenes=[S('🍲',C2,'Come eat!','Come eat!'),S('🏃🏾',C1,'*runs* What did you cook?!','What cooked?!'),S('😐',C2,'There is food in the house. There\'s flour.','flour 😑'),S('😭',C1,'Am I supposed to eat flour raw?! 😭','flour raw?!','shake')];
+}else if(low.includes('wedding')||low.includes('auntie')||low.includes('marry')||low.includes('harusi')){
+bg='💒';scenes=[S('💒',C2,'Shiro! Uko na miaka ngapi sasa?','miaka ngapi?'),S('👰🏾',C1,'Auntie, leo ni harusi ya Carol...','ya Carol...'),S('🍚',C2,'Na yako itakuwa lini? *takes pilau*','yako lini?'),S('💀',C1,'Auntie Investigation Unit! 💀','investigation! 😂')];
+}else if(low.includes('token')||low.includes('kplc')||low.includes('power')||low.includes('stima')){
+bg='💡';scenes=[S('⚽',C1,'89th minute! Man U vs Arsenal!','89th minute!'),S('🌑',C1,'*POWER OFF* Tokens finished!!','POWER OFF!','shake'),S('🔦',C2,'Lipa na M-Pesa...','M-Pesa...'),S('💀',C2,'Oh, network down 😂💀','network down!')];
+}else if(low.includes('matatu')||low.includes('seat')||low.includes('fare')||low.includes('conductor')){
+bg='🚌';scenes=[S('🚌',C1,'*runs* Hiyo kiti ni yangu!','yangu!'),S('😤',C2,'Mimi niliona kwanza!','kwanza!','shake'),S('🎫',C2,'Fare imepanda! 150!','fare 150!'),S('😭',C1,'Haya, tutasimama... 😭','tutasimama')];
+}else if(low.includes('exam')||low.includes('school')||low.includes('leak')){
+bg='📚';scenes=[S('📚',C1,'Exam imel leak! Nimesoma yote!','nimesoma!'),S('📝',C2,'*brings different paper*','different paper','shake'),S('😱',C1,'HII NI GANI?!','HII NI GANI?!','shake'),S('😂',C2,'Pole, ulisoma leak ya Uganda 💀','Uganda 😂')];
+}else{
+// generic funny builder
+bg=['🍗','📶','💸','⛪','🚌','💒'][Math.floor(Math.random()*6)];
+scenes=[S(bg,C1,`*${topic}*`,'*'+topic+'*'),S('👀',C1,kenyanize('Haya, this is serious now.',md),'serious now'),S('😱',C2,kenyanize(`Eh! ${N1}, explain yourself!`,md),'explain!','shake'),S('🤣',C1,kenyanize('Woi... it wasn\'t me! It was the neighbour! 💀',md),'wasn\'t me!'),S('👏',C2,kenyanize('Aki, Small Small Problems! To be continued... 👀',md),'to be continued...')];
+}
+if(count===4) scenes=scenes.slice(0,4);
+if(count===5) scenes=scenes.slice(0,5);
+return{bg,scenes};
+}
+
+// ===== SOUND (WebAudio, no files) =====
+let AC=null;
+function beep(f,d,type){if(!soundOn)return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();let o=AC.createOscillator(),g=AC.createGain();o.type=type||'square';o.frequency.value=f;g.gain.value=.08;o.connect(g);g.connect(AC.destination);o.start();o.stop(AC.currentTime+d)}catch(e){}}
+function pop(){beep(600,.08)} function sting(){beep(150,.3,'sawtooth');setTimeout(()=>beep(100,.4,'sawtooth'),150)} function laughS(){[400,500,600,500].forEach((f,i)=>setTimeout(()=>beep(f,.1),i*90))}
+function toggleSound(){soundOn=!soundOn;document.getElementById('sndLbl').innerText=soundOn?'On':'Off'}
+
+// ===== PLAYER =====
+function renderScene(stageId,scene,chars){
+let aEl=document.getElementById(stageId==='stage'?'actors':'actors2');
+let b=document.getElementById(stageId==='stage'?'bubble':'bubble2');
+let bt=document.getElementById(stageId==='stage'?'btxt':'btxt2');
+let sp=document.getElementById(stageId==='stage'?'spk':'spk2');
+let sub=document.getElementById(stageId==='stage'?'sub':'sub2');
+let bg=document.getElementById(stageId==='stage'?'stageBg':'stageBg2');
+let desc=document.getElementById('sceneDesc');if(desc&&stageId==='stage')desc.innerText='Scene '+(curIdx+1)+'/'+currentScenes.length;
+bg.innerText=scene.bg;
+aEl.innerHTML='';
+chars.slice(0,3).forEach(k=>{let c=CHARS[k];if(!c)return;let d=document.createElement('div');d.className='actor'+(k===scene.who?' big talking':' small');if(scene.act==='shake'&&k===scene.who)d.classList.add('shake');d.innerHTML=`<div class="face">${k===scene.who?(scene.text.includes('😭')?'😭':scene.text.includes('😱')||scene.text.includes('WHAT')?'😱':c.e):c.e}</div><br><span class="nm" style="border:2px solid ${c.color}">${c.name}</span>`;aEl.appendChild(d)});
+b.style.display='block';let spkName=CHARS[scene.who]?CHARS[scene.who].name.toUpperCase():scene.who.toUpperCase();
+sp.innerText='● '+spkName;bt.innerText=scene.text;sub.innerText=scene.sub;
+pop();if(scene.text.includes('😭')||scene.text.includes('WHAT')||scene.text.includes('😱'))sting();
+if(scene.text.includes('😂')||scene.text.includes('💀'))setTimeout(laughS,400);
+}
+function playCurrent(){if(!currentScenes.length)return;curIdx=0;clearInterval(timer);showCur();timer=setInterval(()=>{curIdx++;if(curIdx>=currentScenes.length){clearInterval(timer);document.getElementById('sub').innerText='😂 Follow Small Small Problems! Part 2? 👀';laughS();return}showCur()},len==='15'?2200:2800)}
+function showCur(){let s=currentScenes[curIdx];renderScene('stage',s,selChars);document.getElementById('prog').style.width=((curIdx+1)/currentScenes.length*100)+'%'}
+function nextScene(){if(!currentScenes.length)return;clearInterval(timer);curIdx=(curIdx+1)%currentScenes.length;showCur()}
+
+// watch player
+function loadWatch(i){let e=EPISODES[i];document.getElementById('watchTitle').innerText=e.t;document.getElementById('watchDesc').innerText=e.desc+' • '+e.chars.map(k=>CHARS[k].name).join(', ');document.getElementById('epBadge2').innerText='EP '+(i+1);watchScenes=e.script.map(s=>({bg:e.bg,who:Object.keys(CHARS).find(k=>CHARS[k].name.toLowerCase()===s[0].toLowerCase())||s[0].toLowerCase(),text:s[1],sub:s[1]}));watchIdx=0;renderScene('stage2',watchScenes[0],e.chars)}
+function playWatch(){if(!watchScenes.length)return;watchIdx=0;clearInterval(timer);showW();timer=setInterval(()=>{watchIdx++;if(watchIdx>=watchScenes.length){clearInterval(timer);return}showW()},2400)}
+function showW(){renderScene('stage2',watchScenes[watchIdx],EPISODES.find(e=>e.t===document.getElementById('watchTitle').innerText)?.chars||['shiro','mum']);document.getElementById('prog2').style.width=((watchIdx+1)/watchScenes.length*100)+'%'}
+function nextWatch(){if(!watchScenes.length)return;watchIdx=(watchIdx+1)%watchScenes.length;showW()}
+
+// ===== ACTIONS =====
+function generate(){
+let topic=document.getElementById('topic').value||'Mum catches me eating at midnight';
+let cliff=document.getElementById('cliff').checked;
+let {bg,scenes}=topicToScenes(topic,selChars,mood,len);
+if(cliff&&mood!=='crazy'){scenes.push({bg:'👀',who:selChars[0],text:'To be continued... What do you think happened? 👀 Part 2?',sub:'Part 2? Comment! 👀'})}
+currentScenes=scenes;curIdx=0;
+document.getElementById('epBadge').innerText=`EP • ${len}s • ${mood}`;
+let txt=scenes.map((s,i)=>`Scene ${i+1} [${s.bg}]\n${(CHARS[s.who]?CHARS[s.who].name:s.who)}: ${s.text}`).join('\n\n');
+document.getElementById('scriptEdit').value=`🎬 "${topic}" (${len}s • ${mood} • ${selChars.map(k=>CHARS[k].name).join(', ')})\n\n${txt}`;
+document.getElementById('metaPills').innerHTML=`<span class="pill">🎭 ${selChars.map(k=>CHARS[k].e+' '+CHARS[k].name).join(' • ')}</span><span class="pill">🎨 BG ${bg}</span><span class="pill">${mood==='funny'?'😂 Funny':mood==='dramatic'?'😱 Dramatic':'🤪 Crazy'}</span>`;
+let cap=`😂 ${topic} | Small Small Problems 🇰🇪\n\nIs this your ${selChars.map(k=>CHARS[k].name).join(' & ')} too? 😭👇\nPart ${cliff?'1 — Part 2 if this hits 1000 likes 👀':'Full episode!'}\n\n#SmallSmallProblems #KenyanComedy #AfricanHumour #Nairobi #KOT #Sheng #CapCut #TikTokKenya #MumChronicles #Relatable`;
+document.getElementById('captionBox').innerText=cap;
+showCur();playCurrent();
+}
+function playFromText(){
+let raw=document.getElementById('scriptEdit').value;let lines=raw.split('\n').filter(l=>l.includes(':'));
+currentScenes=lines.map(l=>{let[w,...r]=l.split(':');let who=Object.keys(CHARS).find(k=>CHARS[k].name.toLowerCase()===w.replace(/Scene \d+.*/,'').trim().toLowerCase())||selChars[0];return{bg:'😂',who,text:r.join(':').trim(),sub:r.join(':').trim()}});
+if(!currentScenes.length)currentScenes=[{bg:'😂',who:selChars[0],text:raw.slice(0,120),sub:raw.slice(0,60)}];
+curIdx=0;playCurrent();
+}
+function exportCapCut(){
+let t=document.getElementById('scriptEdit').value;
+let out=t+'\n\n--- CAPCUT EDIT ---\n• Ratio 9:16 • Subtitles ON • Font: Bold\n• SFX: pop on bubble, sting on shock, laugh at 💀\n• BGM: benga/arbantone low vol\n• First 1s: shocked face 😱';
+navigator.clipboard.writeText(out).then(()=>alert('Copied! Paste in CapCut script / notes 📋'));
+}
+function copyCaption(){navigator.clipboard.writeText(document.getElementById('captionBox').innerText).then(()=>alert('Caption + hashtags copied! 📲'))}
+function surprise(){const s=['My crush left me on delivered for 3 days','Dad gives opinion on my haircut','Auntie finds my report card','KPLC tokens finish during Netflix','Neighbour borrows sugar and gossip','Salary finishes in 2 days','Matatu conductor says fare imepanda','Mum finds food missing in sufuria'];document.getElementById('topic').value=s[Math.floor(Math.random()*s.length)];generate()}
+function fillExample(){const k=['Mum catches me eating chicken at midnight','Neighbour steals my WiFi password','Salary day: 25k to 147 bob','Auntie asks when I will marry at wedding','KPLC tokens finish at 89th minute','Chapati moja for family of five','Crush says we need to talk','Matatu seat war'];document.getElementById('topic').value=k[Math.floor(Math.random()*k.length)];generate()}
+function makeCliffhanger(){
+let topic=document.getElementById('topic').value||'She received a message';
+document.getElementById('hookBox').innerText=`PART 1:\n"${topic}..."\n${selChars[0]?CHARS[selChars[0]].name:''} freezes 😱 Phone drops. Screen shows: "I know what you did."\nEND: "What do you think ${CHARS[selChars[0]]?CHARS[selChars[0]].name:''} did? 👀 Part 2?"\n\nPART 2 (post next day):\nReveal it was just eating the last chapati 😂💀\nCaption: "You guessed WRONG 😂 Part 2 here!"`;
+}
+loadWatch(0);
+</script>
+</body>
+</html>

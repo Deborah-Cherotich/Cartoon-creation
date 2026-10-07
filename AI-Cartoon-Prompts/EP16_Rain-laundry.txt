@@ -1,0 +1,13 @@
+﻿TITLE: Rain vs laundry
+STYLE: 2D cartoon, Tom and Jerry style simple, bold outlines, big eyes, exaggerated faces, African, bright, 9:16 vertical. 
+
+1) IMAGE PROMPT (Bing/Leonardo):
+2D cartoon, Tom and Jerry style simple, bold outlines, big eyes, exaggerated faces, African, bright, 9:16 vertical. Girl hanging clothes sunny + sudden rain storm
+
+2) VIDEO PROMPT (Pika/Runway/Hailuo Image-to-Video, 9:16, 5s):
+Girl hangs clothes happy sun, dark clouds fast, MVUA pour, mum shouts NGUO girl runs with basin slipping comedy, smooth walk cycle, talking mouth, squash and stretch, Tom and Jerry timing
+
+3) DIALOGUE for CapCut TTS:
+Finally done! | MVUA! | Mum: SHIROOO NGUO!! | WHY ME?! + rain thunder
+
+SFX: pop, boing, sting. Captions Bold ON.

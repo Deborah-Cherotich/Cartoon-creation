@@ -1,0 +1,60 @@
+SMALL SMALL PROBLEMS - AI CARTOON PACK (Tom & Jerry style, simple)
+================================================================
+Use these prompts in: CapCut PC > AI Video / Script to Video (FREE),
+Pika Labs (pika.art), Runway (runway.ml), Hailuo/Minimax, Luma Dream Machine.
+All videos: 9:16 vertical, 15-30 sec, 24fps, 2D cartoon.
+
+CHARACTER BIBLE - use same every time for consistency!
+-----------------------------------------------------
+STYLE BASE (copy-paste at start of every image prompt):
+"2D cartoon, Tom and Jerry style but simple, bold outlines, big expressive eyes, exaggerated shocked faces, bright colors, African, clean background, vertical 9:16"
+
+MUM: "African Kenyan mother, 35yo, brown skin, short black hair with headwrap kitenge yellow-red, pink blouse, long skirt, barefoot, kind but strict face"
+SHIRO: "Kenyan little girl 8yo, brown skin, two puff ponytails with red ribbons, yellow dress, big eyes, dramatic expressions"
+DAD: "Kenyan father 40yo, brown skin, short beard, blue shirt, brown trousers, important-look"
+KEVIN: "Kenyan boy 12yo, brown skin, fade haircut, green hoodie and jeans, broke but cheeky grin"
+AUNTIE: "Older Kenyan auntie 55yo, plus-size, purple dress, gold earrings, investigative suspicious eyes"
+NEIGHBOUR: "Kenyan man neighbour 40yo, orange t-shirt, cap backwards, nosy smile"
+CRUSH: "Cute Kenyan teen, heart eyes filter vibe, phone in hand"
+M-PESA: "Funny green money monster with M-PESA phone, coins falling"
+
+NEGATIVE (for Runway/Pika): "realistic photo, 3d, blurry, extra fingers, extra legs, scary, dark horror, text watermark"
+
+VOICES (CapCut Text-to-Speech FREE):
+Mum voice: English Female - Deep / Shani. Speed 1.1x, angry-funny
+Shiro voice: English Female - Chipmunk / Cute. Speed 1.2x
+Dad: English Male - Deep
+Kevin: English Male - Young
+Add SFX: CapCut Audio > boing, pop, dramatic sting, crowd laugh
+
+WORKFLOW - DO EPISODE 01 NOW (5 mins):
+--------------------------------------
+1. IMAGE:
+Go to Bing Image Creator (FREE) or Leonardo.ai
+Paste: STYLE BASE + MUM + "walks into small Kenyan kitchen at night, light on, sufuria on stove"
++ SHIRO image: STYLE BASE + SHIRO + "tiptoeing holding fried chicken leg, frozen scared, midnight kitchen"
+Save 2 images.
+
+2. VIDEO (walk + talk):
+Pika / Runway / Hailuo > Image-to-Video, 9:16
+Paste Video Prompt from Ep01 file (in this folder).
+Example: "Mum walks in from left, Shiro freezes holding chicken, camera zoom to shocked face, mouth talking, Tom and Jerry squash and stretch, smooth walk cycle"
+Duration 5s per scene x 4 scenes = 20s.
+
+3. CAPCUT:
+New 9:16 > import 4 clips > Audio > Text to Speech > paste dialogue from Ep file:
+Mum: "Come eat!"
+Shiro: "What did you cook?!"
+Mum: "Nothing. I was just calling you."
+Add Auto-captions Bold + laugh SFX at end.
+
+4. POST with caption from Captions folder.
+
+TIPS FOR TOM & JERRY FEEL:
+- First 1s = ZOOM to shocked eyes
+- Walk cycle: "character walks with bounce, arms swinging"
+- Talk: let AI lips move, but ALWAYS add big subtitles (AI lips not perfect)
+- Add "squash and stretch, smear frames, exaggerated take"
+- Keep backgrounds SIMPLE: 1 kitchen, 1 door, 1 road - reuse!
+
+Files in this folder: EP01 to EP20 - each has Image + Video + Dialogue ready to paste.

@@ -1,0 +1,40 @@
+SMALL SMALL PROBLEMS 🇰🇪 - HOW TO MAKE YOUR VIDEOS
+====================================================
+
+You have everything in this folder:
+- studio.html = your cartoon generator (double-click to open in Chrome)
+- Episodes/ = 20 ready scripts (Scene + dialogue + CapCut notes)
+- Captions/ = 20 TikTok captions + hashtags (copy-paste)
+
+3 STEPS TO CREATE A VIDEO (5 mins each):
+
+1. OPEN STUDIO
+   Double-click studio.html -> type topic -> GENERATE -> PLAY
+   Screen-record it (Xbox Game Bar: Windows+G, or phone record)
+
+2. EDIT IN CAPCUT (free)
+   - New project -> Ratio 9:16 (TikTok)
+   - Import your screen recording
+   - Auto-captions -> Subtitles ON, Bold font
+   - Audio -> Music -> search benga / afrobeats (low volume)
+   - Effects -> pop on speech, whoosh on shock
+   - First 1 second = shocked face 😱 (stops scroll!)
+
+3. POST ON TIKTOK / REELS / SHORTS
+   - Use caption from Captions/ folder
+   - Post 7pm EAT daily (Kenya peak)
+   - For Part 1/2 trick: end with "Part 2?" and post Part 2 next day
+   - Reply to EVERY comment with a funny line
+
+QUICK START - Do this now:
+1. Open Episodes/01_Mum-said-there-is-food.txt
+2. Open studio.html, pick Mum + Shiro, Generate, Play
+3. Record + CapCut + Post with caption 01 caption file
+
+CHARACTERS (reuse endlessly):
+Mum 👩🏾, Dad 👨🏾, Shiro 👧🏾, Kevin 👦🏾, Auntie 👵🏾, Neighbour 🧔🏾‍♂️, Crush 😍, M-Pesa 💸
+
+Keep style SIMPLE: big faces + speech bubbles + subtitles.
+Universal + Kenyan flavour = dating, parents, money, food, church, matatu, KPLC, chama, weddings.
+
+Good luck! 😂🇰🇪

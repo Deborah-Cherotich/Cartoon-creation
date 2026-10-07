@@ -1,0 +1,13 @@
+﻿TITLE: M-Pesa balance check
+STYLE: 2D cartoon, Tom and Jerry style simple, bold outlines, big eyes, exaggerated faces, African, bright, 9:16 vertical. 
+
+1) IMAGE PROMPT (Bing/Leonardo):
+2D cartoon, Tom and Jerry style simple, bold outlines, big eyes, exaggerated faces, African, bright, 9:16 vertical. Girl shouting broke + phone showing 12480 balance
+
+2) VIDEO PROMPT (Pika/Runway/Hailuo Image-to-Video, 9:16, 5s):
+Girl cries broke empty pockets flip, phone dial *334#, balance 12480 pops, awkward grin emotionally broke, smooth walk cycle, talking mouth, squash and stretch, Tom and Jerry timing
+
+3) DIALOGUE for CapCut TTS:
+Shiro: Im broke COMPLETELY! | M-PESA: Check balance? | Balance 12480 | Shiro: Emotionally broke...
+
+SFX: pop, boing, sting. Captions Bold ON.

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Small Small Problems V3 - Slow + Real Voices 🚶🗣️</title>
+<style>*{box-sizing:border-box}body{margin:0;background:#0f0f14;color:#fff;font-family:Segoe UI,Arial;text-align:center}h1{font-size:19px;margin:12px}h1 span{color:#FFD93D}.wrap{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;padding:12px}canvas{background:#1e1e3a;border-radius:18px;border:4px solid #FFD93D}button{padding:12px 16px;border-radius:12px;border:0;font-weight:800;cursor:pointer;margin:4px;font-size:14px}.play{background:#FFD93D;color:#000}.ghost{background:#222;color:#fff}.card{background:#1c1c26;border-radius:14px;padding:14px;max-width:380px;text-align:left;font-size:14px;line-height:1.6}#subs{background:#000;color:#FFD93D;padding:12px;border-radius:10px;font-weight:800;font-size:16px;min-height:56px;margin-top:8px}.scene{font-size:12px;color:#aaa;font-weight:700}</style></head>
+<body>
+<h1>Small Small <span>Problems</span> V3 — SLOW + Mum/Girl voices 🇰🇪</h1>
+<div class="wrap">
+<div><canvas id="c" width="300" height="533"></canvas><br>
+<button class="play" onclick="playEP01()">▶ PLAY EP01 SLOW</button>
+<button class="play" onclick="playEP09()">▶ PLAY EP09 SLOW</button><br>
+<button class="ghost" onclick="stopAll()">⏹ Stop</button>
+<button class="ghost" onclick="nextStep()">⏭ Next line</button>
+<div class="scene" id="sceneLbl">Scene 0/5 • Speed: SLOW (so you can see 👀)</div></div>
+<div class="card"><b>🔊 Voices fixed:</b><br>
+👩🏾 Mum = woman voice • 👧🏾 Shiro = little girl voice (high)<br>
+👨🏾 Dad / Kevin / Neighbour = man voice • 💸 M-Pesa = robot<br>
+<span style="color:#aaa">Chrome/Edge: first click allows voices. If still man voice, change Windows Settings > Time & Language > Speech > add Zira.</span>
+<br><br><span id="status">Press PLAY. Each line now stays 4 seconds so you can SEE + HEAR. Mouths move while talking. 😂</span>
+<div id="subs">Subtitles here... big + slow</div></div>
+</div>
+<script>
+let ctx=document.getElementById('c').getContext('2d');
+let running=false,t=0,raf=null,stepMode=false,stepResolve=null;
+let actors={mum:{x:-80,y:400,talk:0,shock:0},shiro:{x:210,y:410,talk:0,scared:0}};
+let bubble={who:'',text:''};
+let VOICES=[];
+function loadV(){try{VOICES=speechSynthesis.getVoices()}catch(e){}}
+loadV();try{speechSynthesis.onvoiceschanged=loadV}catch(e){}
+function pickVoice(role){
+let vs=VOICES||[];let name=s=>((s.name||'')+' '+(s.lang||'')).toLowerCase();
+// girl Shiro: prefer female + high pitch later
+if(role==='shiro'){return vs.find(v=>name(v).includes('zira'))||vs.find(v=>name(v).includes('female')&&name(v).includes('google uk'))||vs.find(v=>name(v).includes('samantha'))||vs.find(v=>name(v).includes('google us english'))||vs.find(v=>name(v).includes('female'))||vs[0];}
+if(role==='mum'){return vs.find(v=>name(v).includes('zira'))||vs.find(v=>name(v).includes('female'))||vs[0];}
+if(role==='dad'||role==='kevin'){return vs.find(v=>name(v).includes('david'))||vs.find(v=>name(v).includes('male')&&name(v).includes('google'))||vs.find(v=>name(v).includes('male'))||vs[0];}
+return vs[0];
+}
+function speak(text,role){
+return new Promise(res=>{
+document.getElementById('subs').innerText=text;
+try{
+speechSynthesis.cancel();
+let u=new SpeechSynthesisUtterance(text);
+let v=pickVoice(role);if(v)u.voice=v;
+if(role==='shiro'){u.pitch=1.6;u.rate=0.95;}
+else if(role==='mum'){u.pitch=1.0;u.rate=0.9;}
+else if(role==='dad'||role==='kevin'){u.pitch=0.8;u.rate=0.95;}
+else{u.pitch=1.0;u.rate=1.0;}
+let done=false;u.onend=()=>{if(!done){done=true;res()}};u.onerror=()=>{if(!done){done=true;res()}};
+speechSynthesis.speak(u);
+// minimum hold so you can SEE: 3.5s (slow!) + extra for long text
+let minMs=3500+text.length*40;
+setTimeout(()=>{if(!done){done=true;try{speechSynthesis.cancel()}catch(e){}res()}},minMs);
+}catch(e){setTimeout(res,3500)}
+});
+}
+function drawBG(){
+let g=ctx.createLinearGradient(0,0,0,533);g.addColorStop(0,'#2b2b5c');g.addColorStop(1,'#0f0f14');ctx.fillStyle=g;ctx.fillRect(0,0,300,533);
+ctx.fillStyle='#3a3a6a';ctx.fillRect(20,120,260,200);
+ctx.fillStyle='#222';ctx.fillRect(40,200,100,80);ctx.fillStyle='#666';ctx.fillRect(50,190,80,15);
+ctx.fillStyle='#FFD93D';ctx.fillRect(20,320,260,20);
+ctx.fillStyle='#111';ctx.fillRect(0,340,300,193);ctx.fillStyle='#1f1f2f';for(let i=0;i<6;i++)ctx.fillRect(0,360+i*30,300,2);
+ctx.font='60px serif';ctx.globalAlpha=.25;ctx.fillText('🍗',110,170);ctx.globalAlpha=1;
+ctx.fillStyle='#fff';ctx.font='bold 13px Arial';ctx.fillText('12:03 AM • KITCHEN',85,40);
+ctx.fillStyle='#FFD93D';ctx.beginPath();ctx.arc(260,60,18,0,7);ctx.fill();
+}
+function drawChar(type,a,walk){
+let legSwing=walk?Math.sin(t*0.18)*10:0; // slower legs!
+let bob=walk?Math.abs(Math.sin(t*0.18))*3:0;
+let x=a.x,y=a.y-bob;ctx.save();ctx.translate(x,y);
+if(a.shock>0){ctx.scale(1.15,0.9);} // funny squash
+ctx.strokeStyle='#222';ctx.lineWidth=7;ctx.lineCap='round';
+ctx.beginPath();ctx.moveTo(0,-50);ctx.lineTo(-8+legSwing,-0);ctx.stroke();
+ctx.beginPath();ctx.moveTo(0,-50);ctx.lineTo(8-legSwing,-0);ctx.stroke();
+ctx.fillStyle=type==='mum'?'#FF6B9D':'#FFD93D';
+ctx.beginPath();ctx.roundRect(-18,-110,36,65,12);ctx.fill();
+ctx.strokeStyle='#8a5a3b';ctx.lineWidth=8;
+if(type==='shiro'){ctx.beginPath();ctx.moveTo(14,-95);ctx.lineTo(30,-80);ctx.stroke();ctx.font='24px serif';ctx.fillText('🍗',20,-88);
+ctx.beginPath();ctx.moveTo(-14,-95);ctx.lineTo(-22,-80);ctx.stroke();}
+else{ctx.beginPath();ctx.moveTo(14,-95);ctx.lineTo(22,-70);ctx.stroke();ctx.beginPath();ctx.moveTo(-14,-95);ctx.lineTo(-22,-70);ctx.stroke();}
+ctx.fillStyle='#8d5a3b';ctx.beginPath();ctx.arc(0,-135,26,0,7);ctx.fill();
+let eyeW=(a.scared||a.shock)?10:6;
+ctx.fillStyle='#fff';ctx.beginPath();ctx.ellipse(-10,-138,eyeW,11,0,0,7);ctx.fill();ctx.beginPath();ctx.ellipse(10,-138,eyeW,11,0,0,7);ctx.fill();
+ctx.fillStyle='#000';ctx.beginPath();ctx.arc(-10,-136,3,0,7);ctx.fill();ctx.beginPath();ctx.arc(10,-136,3,0,7);ctx.fill();
+if(a.scared){ctx.fillStyle='#6cf';ctx.beginPath();ctx.arc(-20,-120,3,0,7);ctx.fill();ctx.beginPath();ctx.arc(20,-120,3,0,7);ctx.fill();} // sweat!
+ctx.fillStyle='#400';if(a.talk>0){let mh=3+Math.abs(Math.sin(t*0.5))*11;ctx.beginPath();ctx.ellipse(0,-116,9,mh,0,0,7);ctx.fill();ctx.fillStyle='#f66';ctx.beginPath();ctx.ellipse(0,-112,4,3,0,0,7);ctx.fill();}else{ctx.fillRect(-7,-119,14,3);}
+if(type==='mum'){ctx.fillStyle='#FFD93D';ctx.fillRect(-28,-164,56,18);ctx.fillStyle='#e00';ctx.fillRect(-28,-164,56,6);}
+else{ctx.fillStyle='#111';ctx.beginPath();ctx.arc(-15,-157,10,0,7);ctx.fill();ctx.beginPath();ctx.arc(15,-157,10,0,7);ctx.fill();ctx.fillStyle='red';ctx.fillRect(-19,-154,8,4);ctx.fillRect(11,-154,8,4);}
+ctx.font='bold 10px Arial';let nm=type.toUpperCase();let w=ctx.measureText(nm).width;ctx.fillStyle='rgba(0,0,0,.75)';ctx.fillRect(-w/2-6,-8,w+12,15);ctx.fillStyle='#fff';ctx.fillText(nm,-w/2,4);
+ctx.restore();
+}
+function drawBubble(){
+if(!bubble.text)return;ctx.fillStyle='#fff';ctx.fillRect(15,50,270,70);ctx.fillStyle='#000';ctx.font='bold 11px Arial';ctx.fillStyle='#FF6B9D';ctx.fillText(bubble.who,25,66);
+ctx.fillStyle='#111';ctx.font='bold 14px Arial';
+// wrap 2 lines
+let a=bubble.text.slice(0,38),b=bubble.text.slice(38,76);ctx.fillText(a,25,88);if(b)ctx.fillText(b,25,106);
+}
+function loop(){if(!running)return;t+=0.7;drawBG();drawChar('mum',actors.mum,actors.mum.walk);drawChar('shiro',actors.shiro,false);drawBubble();raf=requestAnimationFrame(loop);}
+function stopAll(){running=false;cancelAnimationFrame(raf);try{speechSynthesis.cancel()}catch(e){} if(stepResolve){stepResolve();stepResolve=null}}
+function nextStep(){if(stepResolve){stepResolve();stepResolve=null}}
+function setScene(n,tot,txt){document.getElementById('sceneLbl').innerText=`Scene ${n}/${tot} • SLOW 👀 • ${txt}`;document.getElementById('status').innerText=txt;}
+async function say(role,whoLabel,text){bubble={who:whoLabel,text};let k=whoLabel.includes('MUM')?'mum':'shiro';actors[k].talk=10;await speak(text,k);actors[k].talk=0;await new Promise(r=>setTimeout(r,600));}
+async function playEP01(){
+stopAll();running=true;t=0;actors={mum:{x:-60,y:400,talk:0,shock:0,walk:false},shiro:{x:210,y:410,talk:0,scared:0}};loop();
+setScene(1,5,'Shiro tiptoes... shhh...');bubble={who:'SHIRO 👧🏾',text:'*tiptoe* just one chicken...'};document.getElementById('subs').innerText='*tiptoeing 12:03 AM... shhh*';await new Promise(r=>setTimeout(r,2500));
+setScene(2,5,'Mum walks in slowly...');actors.mum.walk=true;actors.mum.x=-60;
+for(let i=0;i<36;i++){actors.mum.x+=4;await new Promise(r=>setTimeout(r,90));if(!running)return}
+actors.mum.walk=false;actors.mum.shock=8;actors.shiro.scared=1;
+setScene(3,5,'MUM: WHAT ARE YOU DOING?!');await say('mum','MUM 👩🏾','What are you doing?! Lights on!');
+setScene(4,5,'Shiro scared funny...');await say('shiro','SHIRO 👧🏾','Checking if the chicken is still alive!');
+setScene(5,5,'Punchline! 😂');await say('mum','MUM 👩🏾','You will see! Come here!');
+bubble={who:'TO BE CONTINUED 👀',text:'Part 2? Comment what happens!'};document.getElementById('subs').innerText='To be continued... Part 2? Comment! 👀 😂';
+}
+async function playEP09(){
+stopAll();running=true;t=0;actors={mum:{x:80,y:400,talk:0,shock:0},shiro:{x:210,y:410,talk:0,scared:0}};loop();
+setScene(1,3,'Salary comes! Rich dance!');await say('shiro','KEVIN 👦🏾','Salary twenty five thousand! I am rich!');
+setScene(2,3,'Shopping fast... money goes...');bubble={who:'M-PESA 💸',text:'Food... clothes... send money...'};document.getElementById('subs').innerText='*shopping... food... clothes...*';await new Promise(r=>setTimeout(r,3000));
+setScene(3,3,'Balance shock 😭');actors.shiro.scared=1;await say('shiro','KEVIN 👦🏾','Balance one forty seven?! Where did everybody go?!');
+}
+loop();running=false;
+</script>
+</body></html>
